@@ -150,41 +150,60 @@ export default function MapPage() {
               </div>
             </div>
             <div className="card-body">
-              <svg
-                viewBox="0 0 600 600"
-                className="w-100"
-                style={{ maxWidth: '500px', margin: '0 auto', display: 'block', filter: "drop-shadow(2px 2px 0px rgba(0,0,0,0.5))" }}
-              >
-                {regionsData.map((region, index) => {
-                  const paths = [
-                    "M310 200 L340 195 L355 210 L350 235 L325 245 L300 235 L295 215 Z",
-                    "M280 100 L340 90 L380 110 L390 150 L355 195 L310 200 L270 180 L260 140 Z",
-                    "M380 110 L450 130 L480 180 L470 250 L420 280 L355 235 L355 195 L390 150 Z",
-                    "M180 140 L260 140 L270 180 L240 210 L180 220 L140 190 L150 150 Z",
-                    "M60 200 L140 190 L160 230 L140 270 L80 280 L40 250 L30 220 Z",
-                    "M140 270 L160 230 L220 240 L230 280 L210 330 L140 340 L100 310 L80 280 Z",
-                    "M220 240 L295 215 L325 245 L330 290 L290 330 L230 330 L210 330 L230 280 Z",
-                    "M325 245 L355 235 L420 280 L430 340 L390 380 L330 360 L330 290 Z",
-                    "M140 340 L210 330 L230 330 L260 380 L240 450 L200 500 L120 480 L100 400 L100 360 Z",
-                    "M200 500 L240 450 L260 380 L330 400 L380 420 L400 480 L350 520 L280 530 L220 520 Z",
-                    "M330 290 L330 360 L390 380 L450 370 L480 420 L440 460 L380 420 L330 400 L260 380 L290 330 Z",
-                    "M380 420 L440 460 L500 450 L530 490 L480 530 L400 520 L350 520 L400 480 Z",
-                    "M540 480 L555 490 L560 540 L550 580 L530 570 L525 520 L535 490 Z",
-                  ];
-                  const isHovered = hoveredRegion?.name === region.name;
-                  const isSelected = selectedRegion?.name === region.name;
-                  return (
-                    <path
-                      key={region.name}
-                      d={paths[index]}
-                      style={getRegionStyle(region, isHovered, isSelected)}
-                      onClick={() => setSelectedRegion(isSelected ? null : region)}
-                      onMouseEnter={() => setHoveredRegion(region)}
-                      onMouseLeave={() => setHoveredRegion(null)}
-                    />
-                  );
-                })}
-              </svg>
+              <div style={{ position: 'relative' }}>
+                {/* Hover info box - top right with fixed width */}
+                <div style={{ position: 'absolute', top: 0, right: 0, width: '200px', minHeight: '80px' }}>
+                  {hoveredRegion ? (
+                    <div className="card border-dark">
+                      <div className="card-header py-1">
+                        <small className="font-weight-bold">{hoveredRegion.name}</small>
+                      </div>
+                      <div className="card-body py-2">
+                        <p className="mb-1 small">💻 Dons: {hoveredRegion.donations}</p>
+                        <p className="mb-0 small">🏫 Écoles: {hoveredRegion.schools}</p>
+                      </div>
+                    </div>
+                  ) : (
+                    <div style={{ height: '80px' }}></div>
+                  )}
+                </div>
+                
+                <svg
+                  viewBox="0 0 600 600"
+                  className="w-100"
+                  style={{ maxWidth: '500px', margin: '0 auto', display: 'block', filter: "drop-shadow(2px 2px 0px rgba(0,0,0,0.5))" }}
+                >
+                  {regionsData.map((region, index) => {
+                    const paths = [
+                      "M310 200 L340 195 L355 210 L350 235 L325 245 L300 235 L295 215 Z",
+                      "M280 100 L340 90 L380 110 L390 150 L355 195 L310 200 L270 180 L260 140 Z",
+                      "M380 110 L450 130 L480 180 L470 250 L420 280 L355 235 L355 195 L390 150 Z",
+                      "M180 140 L260 140 L270 180 L240 210 L180 220 L140 190 L150 150 Z",
+                      "M60 200 L140 190 L160 230 L140 270 L80 280 L40 250 L30 220 Z",
+                      "M140 270 L160 230 L220 240 L230 280 L210 330 L140 340 L100 310 L80 280 Z",
+                      "M220 240 L295 215 L325 245 L330 290 L290 330 L230 330 L210 330 L230 280 Z",
+                      "M325 245 L355 235 L420 280 L430 340 L390 380 L330 360 L330 290 Z",
+                      "M140 340 L210 330 L230 330 L260 380 L240 450 L200 500 L120 480 L100 400 L100 360 Z",
+                      "M200 500 L240 450 L260 380 L330 400 L380 420 L400 480 L350 520 L280 530 L220 520 Z",
+                      "M330 290 L330 360 L390 380 L450 370 L480 420 L440 460 L380 420 L330 400 L260 380 L290 330 Z",
+                      "M380 420 L440 460 L500 450 L530 490 L480 530 L400 520 L350 520 L400 480 Z",
+                      "M540 480 L555 490 L560 540 L550 580 L530 570 L525 520 L535 490 Z",
+                    ];
+                    const isHovered = hoveredRegion?.name === region.name;
+                    const isSelected = selectedRegion?.name === region.name;
+                    return (
+                      <path
+                        key={region.name}
+                        d={paths[index]}
+                        style={getRegionStyle(region, isHovered, isSelected)}
+                        onClick={() => setSelectedRegion(isSelected ? null : region)}
+                        onMouseEnter={() => setHoveredRegion(region)}
+                        onMouseLeave={() => setHoveredRegion(null)}
+                      />
+                    );
+                  })}
+                </svg>
+              </div>
               <div className="mt-4">
                 <div className="d-flex align-items-center justify-content-between px-3">
                   <span className="small">Faible ({minDonations})</span>
@@ -204,17 +223,6 @@ export default function MapPage() {
                   <span className="small">Élevé ({maxDonations})</span>
                 </div>
               </div>
-              {hoveredRegion && (
-                <div className="card mt-3 border-dark">
-                  <div className="card-header py-1">
-                    <small className="font-weight-bold">{hoveredRegion.name}</small>
-                  </div>
-                  <div className="card-body py-2">
-                    <p className="mb-1 small">💻 Dons: {hoveredRegion.donations}</p>
-                    <p className="mb-0 small">🏫 Écoles: {hoveredRegion.schools}</p>
-                  </div>
-                </div>
-              )}
             </div>
           </div>
         </section>

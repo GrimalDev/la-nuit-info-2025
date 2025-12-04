@@ -59,10 +59,40 @@ body {
     height: 100%;
     display: flex;
     align-items: center;
+    position: relative;
+    transition: all 0.2s ease;
+}
+
+.navbar-footer .nav-link:before {
+    content: "";
+    position: absolute;
+    box-sizing: border-box;
+    display: block;
+    background: transparent;
+    z-index: 9;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-top: 2px solid white;
+    border-left: 2px solid white;
+    border-right: 2px solid #858585;
+    border-bottom: 2px solid #858585;
+}
+
+.navbar-footer .nav-link:active:before {
+    border-color: transparent !important;
 }
 
 .navbar-footer .nav-link-inner-text {
     font-size: 13px;
+    position: relative;
+    z-index: 10;
+    border: 1px solid transparent;
+}
+
+.navbar-footer .nav-link:active .nav-link-inner-text {
+    border: 1px dotted #000;
 }
 
 .navbar-footer .time {
