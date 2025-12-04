@@ -1,41 +1,61 @@
 @import "bootstrap/dist/css/bootstrap.min.css";
 
 :root {
-  --background: #008081;
-  --foreground: #000000;
+    --background: #008081;
+    --foreground: #000000;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 16px;
+    background: var(--background);
+    color: var(--foreground);
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 16px;
 }
 
 /* Ensure proper emoji rendering */
 .card-icon,
 .nav-link-inner-text {
-  font-family: "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif;
+    font-family:
+        "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif;
 }
 
 /* Footer navbar styling */
 .navbar-footer {
-  height: 48px;
-  min-height: 48px;
+    height: 48px;
+    min-height: 48px;
+    padding: 0;
+}
+
+.navbar-footer .navbar-nav {
+    height: 100%;
+}
+
+.navbar-footer .nav-item {
+    height: 100%;
+    display: flex;
+    align-items: center;
 }
 
 .navbar-footer .nav-link {
-  padding: 0.25rem 0.5rem;
-  font-size: 13px;
-  line-height: 1.2;
+    padding: 0.5rem 0.75rem;
+    font-size: 13px;
+    height: 100%;
+    display: flex;
+    align-items: center;
 }
 
 .navbar-footer .nav-link-inner-text {
-  font-size: 13px;
+    font-size: 13px;
 }
 
 .navbar-footer .time {
-  font-size: 13px;
-  line-height: 48px;
-  padding-right: 1rem;
+    font-size: 13px;
+    padding: 0 1rem;
+    height: 47px;
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+    min-width: 10px;
+    max-width: 70px;
+    justify-content: center;
 }
