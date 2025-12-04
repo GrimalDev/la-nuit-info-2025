@@ -12,11 +12,28 @@ body {
     font-size: 16px;
 }
 
+/* Card body text sizing */
+.card-body {
+    font-size: 14px;
+}
+
+.card-body p,
+.card-body li,
+.card-body label {
+    font-size: 14px;
+}
+
+/* Keep small text small */
+.card-body .small,
+.card-body small {
+    font-size: 14px;
+}
+
 /* Ensure proper emoji rendering */
 .card-icon,
 .nav-link-inner-text {
-    font-family:
-        "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif;
+    /* font-family: */
+    /*     "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif; */
 }
 
 /* Footer navbar styling */
