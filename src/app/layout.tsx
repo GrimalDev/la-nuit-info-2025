@@ -15,7 +15,8 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Nird Hardware Donation - Recycle & Educate",
-  description: "Donate your old hardware to clean, install Nird distro and give them to education",
+  description:
+    "Donate your old hardware to clean, install Nird distro and give them to education",
 };
 
 export default function RootLayout({
@@ -31,11 +32,19 @@ export default function RootLayout({
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-        style={{ paddingBottom: '48px' }}
+        style={{ paddingBottom: "48px" }}
       >
         <BootstrapClient />
         {children}
-        <footer style={{ position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 1000 }}>
+        <footer
+          style={{
+            position: "fixed",
+            bottom: 0,
+            left: 0,
+            right: 0,
+            zIndex: 1000,
+          }}
+        >
           <nav className="navbar navbar-main navbar-expand-lg navbar-dark justify-content-between navbar-footer">
             <ul className="navbar-nav navbar-nav-hover flex-row align-items-center">
               <li className="nav-item">
