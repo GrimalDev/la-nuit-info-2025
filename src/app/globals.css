@@ -1,20 +1,41 @@
 @import "bootstrap/dist/css/bootstrap.min.css";
-@import "./w95.css";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --background: #008081;
+  --foreground: #000000;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+  font-size: 16px;
+}
+
+/* Ensure proper emoji rendering */
+.card-icon,
+.nav-link-inner-text {
+  font-family: "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif;
+}
+
+/* Footer navbar styling */
+.navbar-footer {
+  height: 48px;
+  min-height: 48px;
+}
+
+.navbar-footer .nav-link {
+  padding: 0.25rem 0.5rem;
+  font-size: 13px;
+  line-height: 1.2;
+}
+
+.navbar-footer .nav-link-inner-text {
+  font-size: 13px;
+}
+
+.navbar-footer .time {
+  font-size: 13px;
+  line-height: 48px;
+  padding-right: 1rem;
 }
