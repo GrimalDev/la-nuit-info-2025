@@ -1,65 +1,198 @@
-import Image from "next/image";
-
 export default function Home() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
+    <>
+      <header className="header-global">
+        <nav id="navbar-main" className="navbar d-flex flex-row align-items-center navbar-main navbar-expand-lg navbar-dark justify-content-between">
+          <ul className="navbar-nav navbar-nav-hover flex-row align-items-center">
+            <li className="nav-item">
+              <a href="#" className="nav-link" role="button">
+                <span className="nav-link-inner-text">📺 Start</span>
+              </a>
+            </li>
+            <li className="nav-item">
+              <a href="#" className="nav-link" role="button">
+                <span className="nav-link-inner-text">📕 Docs</span>
+              </a>
+            </li>
+          </ul>
+          <div className="time text-center">
+            <span className="time text-uppercase">1:47 PM</span>
+          </div>
+        </nav>
+      </header>
+
+      <main>
+        <section className="section section-lg bg-secondary overflow-hidden z-2">
+          <div className="container z-2">
+            <div className="row justify-content-center pt-6 pt-md-5 pb-0 mb-2">
+              <div className="col-12 col-xl-7">
+                <div className="card card-tertiary">
+                  <div className="card-header text-center">
+                    <span>Windows 95 UI Kit Demo</span>
+                  </div>
+                  <div className="card-body">
+                    <p className="card-text">
+                      Welcome to the retro Windows 95 UI Kit! This is a free UI Kit that brings back
+                      the nostalgia of the 90s with authentic Windows 95 components built on Bootstrap 4.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="section-sm">
+          <div className="container">
+            <div className="row mt-5 mt-lg-2">
+              <div className="col-lg-12">
+                <h4 className="mb-5">Buttons</h4>
+                <button className="btn mr-2 mb-2 btn-primary" type="button">
+                  <span className="btn-text">Primary</span>
+                </button>
+                <button className="btn mr-2 mb-2 btn-primary border-dark" type="button">
+                  <span className="btn-text">Bordered</span>
+                </button>
+                <button className="btn mr-2 mb-2 btn-secondary" type="button">
+                  <span className="btn-text">Secondary</span>
+                </button>
+                <button className="btn mr-2 mb-2 btn-success" type="button">
+                  <span className="btn-text">Success</span>
+                </button>
+                <button className="btn mr-2 mb-2 btn-warning" type="button">
+                  <span className="btn-text">Warning</span>
+                </button>
+                <button className="btn mr-2 mb-2 btn-danger" type="button">
+                  <span className="btn-text">Danger</span>
+                </button>
+
+                <h6 className="text-gray my-5">Icon Buttons</h6>
+                <div className="d-flex align-items-center flex-wrap">
+                  <button className="btn mr-2 mb-2 btn-primary" type="button">
+                    <span className="btn-text">💾 Save</span>
+                  </button>
+                  <button className="btn mr-2 mb-2 btn-primary" type="button">
+                    <span className="btn-text">🖨 Print</span>
+                  </button>
+                  <button className="btn mr-2 mb-2 btn-primary" type="button">
+                    <span className="btn-text">💿 Disk</span>
+                  </button>
+                  <button className="btn mr-2 mb-2 btn-primary" type="button">
+                    <span className="btn-text">📺 Help</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="section-sm bg-secondary">
+          <div className="container">
+            <div className="row">
+              <div className="col-12">
+                <h4 className="text-white mb-5">Cards</h4>
+              </div>
+              <div className="col-12 col-lg-6 mb-4">
+                <div className="card">
+                  <div className="card-header">
+                    Primary Card
+                  </div>
+                  <div className="card-body">
+                    <p className="card-text">
+                      Windows 95 was released on August 24, 1995. It featured a brand new user interface
+                      with the Start menu and taskbar.
+                    </p>
+                    <div className="d-flex justify-content-end mt-3">
+                      <button className="btn btn-sm mr-2 btn-primary border-dark" type="button">
+                        <span className="btn-text">OK</span>
+                      </button>
+                      <button className="btn btn-sm btn-primary" type="button">
+                        <span className="btn-text">Cancel</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="col-12 col-lg-6 mb-4">
+                <div className="card card-tertiary">
+                  <div className="card-header">
+                    <span>Tertiary Card</span>
+                  </div>
+                  <div className="card-body">
+                    <p className="card-text">
+                      The operating system came on either floppy disks (13 disks!) or a CD-ROM.
+                      It required a 386DX processor and at least 4MB of RAM.
+                    </p>
+                    <div className="d-flex mt-3">
+                      <button className="btn btn-sm mr-2 btn-primary border-dark" type="button">
+                        <span className="btn-text">OK</span>
+                      </button>
+                      <button className="btn btn-sm btn-primary" type="button">
+                        <span className="btn-text">Cancel</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="section-sm">
+          <div className="container">
+            <div className="row">
+              <div className="col-lg-12">
+                <h4 className="mb-5">Forms</h4>
+                <div className="row">
+                  <div className="col-12 col-lg-6">
+                    <div className="form-group d-flex align-items-center justify-content-between">
+                      <label htmlFor="username" className="mr-3">Username:</label>
+                      <input id="username" type="text" className="form-control w-75" />
+                    </div>
+                    <div className="form-group d-flex align-items-center justify-content-between">
+                      <label htmlFor="password" className="mr-3">Password:</label>
+                      <input id="password" type="password" className="form-control w-75" />
+                    </div>
+                    <div className="form-group d-flex justify-content-end mb-4">
+                      <div className="form-check">
+                        <label className="form-check-label">
+                          <input className="form-check-input" type="checkbox" />
+                          <span className="form-check-x"></span>
+                          <span className="form-check-sign"></span>
+                          Remember me
+                        </label>
+                      </div>
+                    </div>
+                    <div className="d-flex justify-content-end">
+                      <button className="btn btn-sm mr-3 btn-primary border-dark" type="button">
+                        <span className="btn-text">Login</span>
+                      </button>
+                      <button className="btn btn-sm btn-primary" type="button">
+                        <span className="btn-text">Cancel</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
       </main>
-    </div>
+
+      <footer>
+        <nav className="navbar navbar-main navbar-expand-lg navbar-dark justify-content-between navbar-footer">
+          <ul className="navbar-nav navbar-nav-hover flex-row align-items-center">
+            <li className="nav-item">
+              <a href="#" className="nav-link" role="button">
+                <span className="nav-link-inner-text">📺 Start</span>
+              </a>
+            </li>
+          </ul>
+          <div className="time text-center">
+            <span className="time text-uppercase">1:47 PM</span>
+          </div>
+        </nav>
+      </footer>
+    </>
   );
 }
