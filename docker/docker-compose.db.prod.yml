@@ -5,8 +5,8 @@ services:
       - path: .env
     container_name: la-nuit-info-mariadb-prod
     environment:
-      - MARIADB_ROOT_PASSWORD=testpassword123
-      - MARIADB_DATABASE=libre-tous-tech
+      - MARIADB_ROOT_PASSWORD=${DB_PASSWORD}
+      - MARIADB_DATABASE=${DB_NAME}
       - MARIADB_ALLOW_EMPTY_ROOT_PASSWORD=no
     volumes:
       - mariadb-data:/var/lib/mysql
