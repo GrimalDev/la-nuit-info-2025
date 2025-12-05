@@ -29,11 +29,11 @@ services:
       - mariadb-data:/var/lib/mysql
       - ../database/seeds/libre-tous-tech.sql:/docker-entrypoint-initdb.d/init.sql:ro
     healthcheck:
-      test:
-        ["CMD", "mariadb", "-u${DB_USER}", "-p${DB_PASSWORD}", "-e", "SELECT 1"]
+      test: ["CMD", "mariadb", "-uroot", "-p${DB_PASSWORD}", "-e", "SELECT 1"]
       interval: 10s
       timeout: 5s
       retries: 5
+      start_period: 30s
     restart: unless-stopped
     networks:
       - app-network
