@@ -1,12 +1,19 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Clock from './Clock';
 import ClippyModal from './ClippyModal';
 
 export default function NavbarFooter() {
   const [isClippyOpen, setIsClippyOpen] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  useEffect(() => {
+    // Check if user is admin
+    const token = localStorage.getItem('adminToken');
+    setIsAdmin(!!token);
+  }, []);
 
   return (
     <>
@@ -86,6 +93,20 @@ export default function NavbarFooter() {
               </span>
             </Link>
           </li>
+          {isAdmin && (
+            <li className="nav-item">
+              <Link
+                href="/admin"
+                className="nav-link"
+                role="button"
+                style={{ borderLeft: '2px solid #fff' }}
+              >
+                <span className="nav-link-inner-text">
+                  👨‍💼 Admin
+                </span>
+              </Link>
+            </li>
+          )}
         </ul>
         <div className="text-center">
           <Clock />
