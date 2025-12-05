@@ -97,6 +97,40 @@ CREATE TABLE `ip-limit-donations` (
   `number-donations` tinyint(4) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `partners`
+--
+
+CREATE TABLE `partners` (
+  `id` int(11) NOT NULL,
+  `organization_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `organization_type` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `contact_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `phone` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `region` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `address` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `siret` varchar(14) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `hardware_quantity` int(11) NOT NULL,
+  `description` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `status` int(11) NOT NULL DEFAULT 1,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `partner-status`
+--
+
+CREATE TABLE `partner-status` (
+  `id` int(11) NOT NULL,
+  `name` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 --
 -- Indexes for dumped tables
 --
@@ -145,6 +179,23 @@ ALTER TABLE `ip-limit-donations`
   ADD KEY `ip` (`ip`);
 
 --
+-- Indexes for table `partners`
+--
+ALTER TABLE `partners`
+  ADD PRIMARY KEY IF NOT EXISTS (`id`),
+  ADD KEY `idx_partners_email` (`email`),
+  ADD KEY `idx_partners_status` (`status`),
+  ADD KEY `idx_partners_created_at` (`created_at` DESC),
+  ADD KEY `idx_partners_region` (`region`),
+  ADD KEY `idx_partners_organization_type` (`organization_type`);
+
+--
+-- Indexes for table `partner-status`
+--
+ALTER TABLE `partner-status`
+  ADD PRIMARY KEY IF NOT EXISTS (`id`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -179,6 +230,18 @@ ALTER TABLE `ip-limit-donations`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
+-- AUTO_INCREMENT for table `partners`
+--
+ALTER TABLE `partners`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+
+--
+-- AUTO_INCREMENT for table `partner-status`
+--
+ALTER TABLE `partner-status`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
 -- Constraints for dumped tables
 --
 
@@ -196,6 +259,12 @@ ALTER TABLE `donations`
   ADD CONSTRAINT `constraint_donations-status_donations` FOREIGN KEY (`status`) REFERENCES `donations-status` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
+-- Constraints for table `partners`
+--
+ALTER TABLE `partners`
+  ADD CONSTRAINT `constraint_partner-status_partners` FOREIGN KEY (`status`) REFERENCES `partner-status` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
 -- Dumping data for table `donations-status`
 --
 
@@ -203,6 +272,15 @@ INSERT INTO `donations-status` (`id`, `name`) VALUES(1, 'excellent');
 INSERT INTO `donations-status` (`id`, `name`) VALUES(2, 'good');
 INSERT INTO `donations-status` (`id`, `name`) VALUES(3, 'acceptable');
 INSERT INTO `donations-status` (`id`, `name`) VALUES(4, 'to-repair');
+
+--
+-- Dumping data for table `partner-status`
+--
+
+INSERT INTO `partner-status` (`id`, `name`) VALUES(1, 'pending');
+INSERT INTO `partner-status` (`id`, `name`) VALUES(2, 'approved');
+INSERT INTO `partner-status` (`id`, `name`) VALUES(3, 'rejected');
+INSERT INTO `partner-status` (`id`, `name`) VALUES(4, 'suspended');
 
 --
 -- Dumping data for table `alternatives-to-tags`
@@ -346,6 +424,32 @@ INSERT INTO `ip-limit-donations` (`id`, `ip`, `number-donations`) VALUES
 (13, '192.168.5.55', 3),
 (14, '172.18.0.25', 4),
 (15, '10.100.50.75', 2);
+
+--
+-- Dumping data for table `partners`
+--
+
+INSERT INTO `partners` (`id`, `organization_name`, `organization_type`, `contact_name`, `email`, `phone`, `region`, `address`, `siret`, `hardware_quantity`, `description`, `status`, `created_at`, `updated_at`) VALUES
+(1, 'Association Tech Solidaire', 'association', 'Marie Dubois', 'contact@techsolidaire.fr', '0145678901', 'Île-de-France', '15 Rue de la République, 75001 Paris', '12345678900012', 50, 'Association collectant du matériel informatique pour les écoles défavorisées', 2, '2024-10-15 09:00:00', '2024-10-20 14:30:00'),
+(2, 'Lycée Victor Hugo', 'school', 'Jean Martin', 'direction@lycee-vhugo.fr', '0298765432', 'Bretagne', '28 Avenue des Écoles, 29200 Brest', NULL, 30, 'Renouvellement du parc informatique - anciens PC à donner', 2, '2024-10-18 10:30:00', '2024-10-22 16:00:00'),
+(3, 'TechCorp Solutions', 'company', 'Sophie Laurent', 's.laurent@techcorp.fr', '0467890123', 'Occitanie', '42 Boulevard Tech, 31000 Toulouse', '98765432100023', 120, 'Parc informatique entreprise - renouvellement matériel', 2, '2024-10-20 14:15:00', '2024-10-25 11:00:00'),
+(4, 'Mairie de Lyon 3e', 'collectivity', 'Pierre Rousseau', 'p.rousseau@mairie-lyon3.fr', '0478901234', 'Auvergne-Rhône-Alpes', '5 Place de la Mairie, 69003 Lyon', '23456789000034', 80, 'Don de matériel bureautique suite à modernisation', 2, '2024-10-22 11:00:00', '2024-10-28 09:30:00'),
+(5, 'Université Paris-Saclay', 'school', 'Claire Petit', 'c.petit@universite-ps.fr', '0169876543', 'Île-de-France', 'Campus Universitaire, 91400 Orsay', NULL, 200, 'Ancien matériel informatique des salles de TP', 2, '2024-10-25 08:30:00', '2024-11-01 15:45:00'),
+(6, 'Les Restos Numériques', 'association', 'Luc Bernard', 'luc.b@restosnumeriques.org', '0556789012', 'Nouvelle-Aquitaine', '18 Rue Solidaire, 33000 Bordeaux', '34567890100045', 45, 'Collecte de matériel pour accompagnement numérique', 2, '2024-10-28 13:20:00', '2024-11-02 10:15:00'),
+(7, 'InnoTech Industries', 'company', 'Antoine Moreau', 'a.moreau@innotech.fr', '0388901234', 'Grand Est', '67 Rue Innovation, 67000 Strasbourg', '45678901200056', 95, 'Renouvellement parc informatique - matériel fonctionnel disponible', 1, '2024-11-01 09:45:00', '2024-11-01 09:45:00'),
+(8, 'Collège Jean Moulin', 'school', 'Emma Dubois', 'e.dubois@college-jmoulin.fr', '0241234567', 'Pays de la Loire', '9 Avenue de l\'Éducation, 44000 Nantes', NULL, 40, 'Don ordinateurs et écrans suite à subvention', 2, '2024-11-03 10:30:00', '2024-11-08 14:20:00'),
+(9, 'Digital Solidarité 13', 'association', 'Thomas Leroy', 'thomas@digitalsolidarite13.fr', '0491234567', 'Provence-Alpes-Côte d\'Azur', '23 Boulevard Numérique, 13001 Marseille', '56789012300067', 60, 'Association de réduction fracture numérique', 2, '2024-11-05 15:00:00', '2024-11-10 11:30:00'),
+(10, 'Green IT Services', 'company', 'Sarah Vincent', 's.vincent@greenitservices.fr', '0134567890', 'Île-de-France', '88 Rue Écologie, 92100 Boulogne-Billancourt', '67890123400078', 150, 'Entreprise éco-responsable - don matériel réutilisable', 2, '2024-11-07 11:15:00', '2024-11-12 16:45:00'),
+(11, 'Conseil Départemental 35', 'collectivity', 'Nicolas Robert', 'n.robert@cd35.fr', '0299123456', 'Bretagne', '1 Rue Administration, 35000 Rennes', '78901234500089', 110, 'Matériel bureautique suite réorganisation services', 1, '2024-11-10 08:00:00', '2024-11-10 08:00:00'),
+(12, 'École Primaire Jules Ferry', 'school', 'Camille Simon', 'c.simon@ecole-jferry.fr', '0354678901', 'Grand Est', '12 Rue des Écoliers, 54000 Nancy', NULL, 25, 'Ancien matériel informatique suite à équipement neuf', 2, '2024-11-12 14:30:00', '2024-11-15 10:00:00'),
+(13, 'Emmaüs Connect Paris', 'association', 'Lucas Michel', 'l.michel@emmaus-connect.fr', '0142345678', 'Île-de-France', '34 Rue Solidarité, 75018 Paris', '89012345600090', 70, 'Lutte contre exclusion numérique - besoin matériel', 2, '2024-11-14 09:30:00', '2024-11-18 15:20:00'),
+(14, 'DataFlow Corporation', 'company', 'Léa Fontaine', 'l.fontaine@dataflow.fr', '0467123456', 'Occitanie', '55 Avenue Innovation, 34000 Montpellier', '90123456700001', 180, 'Renouvellement infrastructure IT - matériel 5 ans', 1, '2024-11-16 10:45:00', '2024-11-16 10:45:00'),
+(15, 'Institut Technologique Nantes', 'school', 'Hugo Lambert', 'h.lambert@itn.fr', '0240987654', 'Pays de la Loire', '45 Campus Tech, 44300 Nantes', NULL, 90, 'Laboratoires informatique - ancien équipement fonctionnel', 2, '2024-11-18 13:00:00', '2024-11-22 09:15:00'),
+(16, 'Région Nouvelle-Aquitaine', 'collectivity', 'Manon Lefebvre', 'm.lefebvre@nouvelle-aquitaine.fr', '0557890123', 'Nouvelle-Aquitaine', '14 Esplanade Région, 33000 Bordeaux', '01234567800012', 250, 'Programme renouvellement lycées - don matériel', 2, '2024-11-20 11:30:00', '2024-11-25 14:45:00'),
+(17, 'Cyber-Aide Association', 'association', 'Mathis Garnier', 'mathis@cyberaide.org', '0476543210', 'Auvergne-Rhône-Alpes', '71 Rue Entraide, 38000 Grenoble', '12345098700023', 55, 'Aide aux seniors pour accès numérique', 1, '2024-11-22 15:45:00', '2024-11-22 15:45:00'),
+(18, 'Smart Solutions SAS', 'company', 'Chloé Morel', 'c.morel@smartsolutions.fr', '0223456789', 'Normandie', '19 Parc Techno, 14000 Caen', '23456109800034', 130, 'Migration cloud - libération matériel sur site', 2, '2024-11-24 08:20:00', '2024-11-28 16:30:00'),
+(19, 'Université Bordeaux Montaigne', 'school', 'Tom Rousseau', 't.rousseau@u-bordeaux-montaigne.fr', '0556432109', 'Nouvelle-Aquitaine', 'Domaine Universitaire, 33607 Pessac', NULL, 160, 'Renouvellement parc informatique bibliothèques', 1, '2024-11-26 10:00:00', '2024-11-26 10:00:00'),
+(20, 'Ville de Strasbourg', 'collectivity', 'Inès David', 'i.david@strasbourg.eu', '0388765432', 'Grand Est', 'Hôtel de Ville, 67000 Strasbourg', '34567210900045', 140, 'Modernisation services municipaux - don équipements', 2, '2024-11-28 13:45:00', '2024-12-02 11:00:00');
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
