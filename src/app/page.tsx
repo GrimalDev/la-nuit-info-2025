@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 
 export default function Home() {
   const [stats, setStats] = useState({
+    totalDonations: 0,
     totalUnits: 0,
     schoolsReached: 0,
     totalPartners: 0,
@@ -16,6 +17,7 @@ export default function Home() {
       .then(data => {
         if (data.success) {
           setStats({
+            totalDonations: data.stats.totalDonations,
             totalUnits: data.stats.totalUnits,
             schoolsReached: data.stats.schoolsReached,
             totalPartners: data.stats.totalPartners,
@@ -82,7 +84,7 @@ export default function Home() {
                 </div>
                 <div className="card-body text-center d-flex flex-column justify-content-center">
                   <h2 className="display-3 mb-0">{loading ? '...' : stats.totalUnits}</h2>
-                  <p className="text-muted mb-0">France entière</p>
+                  <p className="text-muted mb-0">équipements</p>
                 </div>
               </div>
             </div>
