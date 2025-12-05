@@ -7,9 +7,9 @@ services:
       - NODE_ENV=production
       - DB_HOST=mariadb
       - DB_PORT=3306
-      - DB_NAME=libre-tous-tech
-      - DB_USER=root
-      - DB_PASSWORD=testpassword123
+      - DB_NAME=${DB_NAME:-libre-tous-tech}
+      - DB_USER=${DB_USER:-root}
+      - DB_PASSWORD=${DB_PASSWORD:-testpassword123}
     restart: unless-stopped
     networks:
       - app-network
@@ -18,10 +18,9 @@ services:
     image: mariadb:10.8
     container_name: la-nuit-info-mariadb
     environment:
-      - MARIADB_ROOT_PASSWORD=testpassword123
-      - MARIADB_DATABASE=libre-tous-tech
+      - MARIADB_ROOT_PASSWORD=${DB_PASSWORD:-testpassword123}
+      - MARIADB_DATABASE=${DB_NAME:-libre-tous-tech}
       - MARIADB_ALLOW_EMPTY_ROOT_PASSWORD=no
-      - MYSQL_PWD=testpassword123
     ports:
       - "3306:3306"
     volumes:
