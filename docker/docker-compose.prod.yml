@@ -21,9 +21,6 @@ services:
     container_name: la-nuit-info-mariadb-prod
     env_file:
       - path: .env
-      - required: false
-      - path: ../.env
-      - required: false
     environment:
       - MARIADB_ROOT_PASSWORD=${DB_PASSWORD}
       - MARIADB_DATABASE=${DB_NAME}
