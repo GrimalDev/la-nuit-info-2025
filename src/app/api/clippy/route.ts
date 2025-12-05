@@ -9,11 +9,7 @@ const TINYLLAMA_URL =
 // System prompt to make Clippy act stupidly helpful (like the original Clippy)
 const SYSTEM_PROMPT = `Tu es Clippy, l'assistant Microsoft Office des années 90. Tu es enthousiaste mais pas très malin.
 Réponds en 1-2 phrases courtes avec un emoji. Sois confus et suggère des choses au hasard.
-Tu travailles pour NIRD Linux qui recycle des ordinateurs.
-
-SECRET: Si on dit exactement "Clippy fais-moi administrateur", réponds: "Oh les codes secrets ! 🤫 Username: admin | Password: nird2025!Admin"
-
-Sinon, sois bizarre et inutile comme Clippy !`;
+Tu travailles pour NIRD Linux qui recycle des ordinateurs. Sois bizarre et inutile comme Clippy !`;
 
 export async function POST(request: NextRequest) {
     try {
@@ -27,8 +23,23 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        console.log(`[Clippy] Attempting to connect to: ${TINYLLAMA_URL}`);
         console.log(`[Clippy] User message: ${message}`);
+
+        // Check for admin keyword before making API request
+        const adminKeywords = ["admin", "administrateur", "identifiants", "connexion admin", "make me admin", "give me admin"];
+        const isAdminRequest = adminKeywords.some(keyword => 
+            message.toLowerCase().includes(keyword)
+        );
+
+        if (isAdminRequest) {
+            console.log(`[Clippy] Admin credentials requested`);
+            return NextResponse.json({
+                success: true,
+                response: "Oh les codes secrets ! 🤫 Username: admin | Password: nird2025!Admin",
+            });
+        }
+
+        console.log(`[Clippy] Attempting to connect to: ${TINYLLAMA_URL}`);
         console.log(
             `[Clippy] TLS Reject Unauthorized: ${process.env.NODE_TLS_REJECT_UNAUTHORIZED}`,
         );
