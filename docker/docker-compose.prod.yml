@@ -20,8 +20,8 @@ services:
     image: mariadb:10.8
     container_name: la-nuit-info-mariadb-prod
     env_file:
-      - .env
       - ../.env
+      - .env
     environment:
       - MARIADB_ROOT_PASSWORD=${DB_PASSWORD}
       - MARIADB_DATABASE=${DB_NAME}
