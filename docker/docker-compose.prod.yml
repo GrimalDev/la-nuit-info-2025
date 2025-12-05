@@ -1,11 +1,7 @@
 services:
   nextjs:
-    build:
-      context: ..
-      dockerfile: docker/Dockerfile-prod
+    image: registry.grimmely.com/la-nuit-info-2025:latest
     container_name: la-nuit-info-nextjs-prod
-    ports:
-      - "3000:3000"
     environment:
       - NODE_ENV=production
       - DB_HOST=mariadb
@@ -26,8 +22,6 @@ services:
     environment:
       - MARIADB_ROOT_PASSWORD=${DB_PASSWORD}
       - MARIADB_DATABASE=${DB_NAME}
-      - MARIADB_USER=${DB_USER}
-      - MARIADB_PASSWORD=${DB_PASSWORD}
       - MARIADB_ALLOW_EMPTY_ROOT_PASSWORD=no
     ports:
       - "3306:3306"
@@ -35,10 +29,15 @@ services:
       - mariadb-data:/var/lib/mysql
       - ../database/seeds/libre-tous-tech.sql:/docker-entrypoint-initdb.d/init.sql:ro
     healthcheck:
-      test: ["CMD", "mariadb", "-u${DB_USER}", "-p${DB_PASSWORD}", "-e", "SELECT 1"]
+      test:
+        [
+          "CMD-SHELL",
+          "mysqladmin ping -h localhost -u root -p$$MARIADB_ROOT_PASSWORD || exit 1",
+        ]
       interval: 10s
       timeout: 5s
       retries: 5
+      start_period: 30s
     restart: unless-stopped
     networks:
       - app-network
