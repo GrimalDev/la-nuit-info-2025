@@ -1,0 +1,71 @@
+Software;Alternative To;Tags
+Nextcloud;Google Drive, Dropbox, OneDrive;Self-hostable, Productivité
+OwnCloud;Google Drive, Dropbox;Self-hostable, Productivité
+Immich;Google Photos;Self-hostable, Media
+Ente Auth;Google Authenticator, Microsoft Authenticator;Self-hostable, Communication
+Ente Photos;Google Photos, Apple Photos;Self-hostable, Media
+PhotoPrism;Google Photos;Self-hostable, Media
+SearXNG;Google Search, Bing;Self-hostable, Search
+OpenStreetMap;Google Maps;Self-hostable, Web
+Seafile;Dropbox, Google Drive;Self-hostable, Productivité
+Syncthing;Dropbox, OneDrive;Self-hostable, Productivité
+LibrePhotos;Google Photos;Self-hostable, Media
+Lychee;Google Photos;Self-hostable, Media
+Bitwarden;LastPass, 1Password;Self-hostable, Productivité, Security
+Vaultwarden;LastPass, 1Password;Self-hostable, Productivité, Security
+Mailcow;Google Workspace, Microsoft 365;Self-hostable, Communication
+2FAuth;Google Authenticator;Self-hostable, Security
+Whoogle;Google Search;Self-hostable, Search
+Matrix Synapse;WhatsApp, Discord, Messenger;Self-hostable, Communication
+Element;WhatsApp, Discord, Telegram;Self-hostable, Communication
+PeerTube;YouTube;Self-hostable, Media
+Jellyfin;Netflix, Plex;Self-hostable, Media
+Navidrome;Spotify, Apple Music;Self-hostable, Media
+Calibre-Web;Kindle Cloud, Google Books;Self-hostable, Productivité, Media
+Home Assistant;Google Home, Alexa;Self-hostable, Productivité
+Gitea;GitHub, GitLab;Self-hostable, Productivité
+Forgejo;GitHub, GitLab;Self-hostable, Productivité
+FreshRSS;Feedly;Self-hostable, Productivité
+Miniflux;Feedly;Self-hostable, Productivité
+Kanboard;Trello;Self-hostable, Productivité
+Redmine;Jira;Self-hostable, Productivité
+BookStack;Confluence, Notion;Self-hostable, Productivité
+CryptPad;Google Docs, Microsoft Office Online;Self-hostable, Productivité
+Grafana;Datadog, New Relic;Self-hostable, Productivité
+Prometheus;Datadog, New Relic;Self-hostable, Productivité
+SFTPGo;Google Drive, Dropbox;Self-hostable, Productivité
+Joplin Server;Evernote, Notion;Self-hostable, Productivité
+Collabora Online;Google Docs, Microsoft Office Online;Self-hostable, Productivité
+OnlyOffice Community;Microsoft Office Online;Self-hostable, Productivité
+Mastodon;Twitter (X);Self-hostable, Productivité
+Lemmy;Reddit;Self-hostable, Web, Communication
+Pixelfed;Instagram;Self-hostable, Web, Communication
+Diaspora;Facebook;Self-hostable, Media, Web
+Funkwhale;Spotify, SoundCloud;Self-hostable, Web, Communication
+WriteFreely;Medium;Self-hostable, Media
+HedgeDoc;Google Docs, Notion;Self-hostable, Productivité, Web
+Etherpad;Google Docs;Self-hostable, Productivité
+Framadate;Doodle;Self-hostable, Productivité
+Framapad;Google Docs;Self-hostable, Productivité
+Framapiaf;Twitter (X);Self-hostable, Productivité
+Framalistes;Google Groups;Self-hostable, Communication
+Framatalk;Zoom, Google Meet;Self-hostable, Communication
+Disroot;Google Workspace;Self-hostable, Communication
+Riseup Paste;Pastebin;Self-hostable, Communication, Web
+LibreTranslate;Google Translate;Self-hostable, Productivité
+OpenFoodFacts;OpenTable, Yuka;Self-hostable, Web, Productivity
+OpenLibrary;Amazon Kindle, Google Books;Self-hostable, Web
+OpenProductsFacts;GS1, Open Product Data;Self-hostable, Web, Productivité
+OpenAerialMap;Google Earth;Self-hostable, Web
+OpenWeatherMap (open data);Weather.com, AccuWeather;Self-hostable, Web, Media
+OpenTrails;AllTrails;Self-hostable, Web
+OpenAddresses;Google Maps Address API;Self-hostable, Web
+NextDNS;Cloudflare DNS, Google DNS;Web, Security
+Pi-hole;AdGuard Home;Self-hostable, Security
+PeerGuardian;Little Snitch;Self-hostable, Security
+F-Droid;Google Play Store;Web, Productivité
+Standard Notes;Evernote, OneNote;Self-hostable, Productivité
+Signal;WhatsApp, Messenger;Web, Communication
+Jitsi Meet;Zoom, Google Meet;Web, Communication
+BigBlueButton;Zoom, Microsoft Teams;Self-hostable, Communication
+Thunderbird;Outlook, Gmail;Self-hostable, Communication, Productivité
