@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 interface ClippyModalProps {
   isOpen: boolean;
@@ -12,6 +12,18 @@ export default function ClippyModal({ isOpen, onClose }: ClippyModalProps) {
     { text: "Bonjour ! Je suis Clippy, votre assistant virtuel ! 📎 Comment puis-je vous aider aujourd'hui ?", isUser: false }
   ]);
   const [inputValue, setInputValue] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const chatContainerRef = useRef<HTMLDivElement>(null);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  useEffect(() => {
+    // Auto-scroll when messages change
+    scrollToBottom();
+  }, [messages]);
 
   useEffect(() => {
     if (!isOpen) {
@@ -24,29 +36,48 @@ export default function ClippyModal({ isOpen, onClose }: ClippyModalProps) {
     }
   }, [isOpen]);
 
-  const handleSend = () => {
-    if (!inputValue.trim()) return;
+  const handleSend = async () => {
+    if (!inputValue.trim() || isLoading) return;
 
     // Add user message
     const userMessage = { text: inputValue, isUser: true };
     setMessages(prev => [...prev, userMessage]);
-
-    // Generate Clippy response
-    const responses = [
-      "Excellent choix ! Je peux vous aider avec ça. 📎",
-      "C'est une très bonne question ! Laissez-moi vous expliquer...",
-      "Je vois que vous êtes intéressé par le recyclage informatique ! 💻",
-      "Saviez-vous que NIRD Linux peut fonctionner sur des PC de plus de 10 ans ? 🐧",
-      "Pour faire un don, rendez-vous sur la page Don ! 📝",
-      "Consultez notre carte pour voir l'impact dans votre région ! 🗺️",
-    ];
-
-    setTimeout(() => {
-      const randomResponse = responses[Math.floor(Math.random() * responses.length)];
-      setMessages(prev => [...prev, { text: randomResponse, isUser: false }]);
-    }, 500);
-
+    
+    const currentInput = inputValue;
     setInputValue('');
+    setIsLoading(true);
+
+    try {
+      // Call TinyLlama API
+      const response = await fetch('/api/clippy', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ message: currentInput }),
+      });
+
+      const data = await response.json();
+      
+      if (data.success && data.response) {
+        setMessages(prev => [...prev, { text: data.response, isUser: false }]);
+      } else {
+        throw new Error('Invalid response');
+      }
+    } catch (error) {
+      console.error('Error calling Clippy API:', error);
+      // Fallback response
+      const fallbackResponses = [
+        "Oh ! Je suis un peu perdu... Mais je peux vous dire que NIRD Linux c'est génial ! 📎",
+        "Hmm... Je ne suis pas sûr de comprendre. Voulez-vous faire un don ? 🎁",
+        "Euh... Excellente question ! Avez-vous visité notre carte interactive ? 🗺️",
+        "Je crois que j'ai besoin d'un café... ☕ Parlons plutôt de recyclage informatique !",
+      ];
+      const randomResponse = fallbackResponses[Math.floor(Math.random() * fallbackResponses.length)];
+      setMessages(prev => [...prev, { text: randomResponse, isUser: false }]);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   if (!isOpen) return null;
@@ -92,6 +123,7 @@ export default function ClippyModal({ isOpen, onClose }: ClippyModalProps) {
 
           {/* Chat messages */}
           <div
+            ref={chatContainerRef}
             style={{
               height: '300px',
               overflowY: 'auto',
@@ -124,6 +156,8 @@ export default function ClippyModal({ isOpen, onClose }: ClippyModalProps) {
                 </div>
               </div>
             ))}
+            {/* Invisible element to scroll to */}
+            <div ref={messagesEndRef} />
           </div>
 
           {/* Input area */}
@@ -135,9 +169,10 @@ export default function ClippyModal({ isOpen, onClose }: ClippyModalProps) {
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
               onKeyPress={(e) => e.key === 'Enter' && handleSend()}
+              disabled={isLoading}
             />
-            <button className="btn btn-primary" onClick={handleSend}>
-              <span className="btn-text">Envoyer</span>
+            <button className="btn btn-primary" onClick={handleSend} disabled={isLoading}>
+              <span className="btn-text">{isLoading ? '⏳' : 'Envoyer'}</span>
             </button>
           </div>
         </div>
