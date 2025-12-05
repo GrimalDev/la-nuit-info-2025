@@ -2,7 +2,6 @@ services:
   nextjs:
     image: registry.grimmely.com/la-nuit-info-2025:latest
     container_name: la-nuit-info-nextjs
-    command: sh -c "sleep 15 && bun server.js"
     pull_policy: always
     environment:
       - NODE_ENV=production
@@ -11,8 +10,6 @@ services:
       - DB_NAME=${DB_NAME:-libre-tous-tech}
       - DB_USER=${DB_USER:-root}
       - DB_PASSWORD=${DB_PASSWORD:-testpassword123}
-    ports:
-      - "3000:3000"
     depends_on:
       - mariadb
     restart: unless-stopped
