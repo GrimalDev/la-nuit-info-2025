@@ -29,11 +29,14 @@ services:
     environment:
       - MARIADB_ROOT_PASSWORD=rootpassword
       - MARIADB_DATABASE=libre-tous-tech
+      - MARIADB_ALLOW_EMPTY_ROOT_PASSWORD=no
+    ports:
+      - "3306:3306"
     volumes:
       - mariadb-data:/var/lib/mysql
       - ../database/seeds/libre-tous-tech.sql:/docker-entrypoint-initdb.d/init.sql:ro
     healthcheck:
-      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      test: ["CMD", "mariadb", "-uroot", "-prootpassword", "-e", "SELECT 1"]
       interval: 10s
       timeout: 5s
       retries: 5
