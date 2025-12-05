@@ -3,7 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import Link from "next/link";
 import "./globals.css";
 import BootstrapClient from "@/components/BootstrapClient";
-import Clock from "@/components/Clock";
+import NavbarFooter from "@/components/NavbarFooter";
 
 const geistSans = Geist({
     variable: "--font-geist-sans",
@@ -47,64 +47,7 @@ export default function RootLayout({
                         zIndex: 1000,
                     }}
                 >
-                    <nav className="navbar navbar-main navbar-expand-lg navbar-dark justify-content-between navbar-footer">
-                        <ul className="navbar-nav navbar-nav-hover flex-row align-items-center">
-                            <li className="nav-item">
-                                <Link href="/" className="nav-link" role="button">
-                                    <span className="nav-link-inner-text">
-                                        🪟 Accueil
-                                    </span>
-                                </Link>
-                            </li>
-                            <li className="nav-item">
-                                <Link
-                                    href="/performance"
-                                    className="nav-link"
-                                    role="button"
-                                >
-                                    <span className="nav-link-inner-text">
-                                        📊 Performance
-                                    </span>
-                                </Link>
-                            </li>
-                            <li className="nav-item">
-                                <Link
-                                    href="/donate"
-                                    className="nav-link"
-                                    role="button"
-                                >
-                                    <span className="nav-link-inner-text">
-                                        📝 Don
-                                    </span>
-                                </Link>
-                            </li>
-                            <li className="nav-item">
-                                <Link
-                                    href="/map"
-                                    className="nav-link"
-                                    role="button"
-                                >
-                                    <span className="nav-link-inner-text">
-                                        🗺️ Carte
-                                    </span>
-                                </Link>
-                            </li>
-                            <li className="nav-item">
-                                <Link
-                                    href="/about"
-                                    className="nav-link"
-                                    role="button"
-                                >
-                                    <span className="nav-link-inner-text">
-                                        📕 À propos
-                                    </span>
-                                </Link>
-                            </li>
-                        </ul>
-                        <div className="text-center">
-                            <Clock />
-                        </div>
-                    </nav>
+                    <NavbarFooter />
                 </footer>
             </body>
         </html>

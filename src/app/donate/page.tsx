@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const regionsData = [
     "Île-de-France",
@@ -27,12 +27,46 @@ export default function DonatePage() {
         quantity: "1",
         condition: "",
     });
+    const [totalDonated, setTotalDonated] = useState(0);
+    const [remainingSlots, setRemainingSlots] = useState(5);
+
+    useEffect(() => {
+        // Check localStorage for donation count
+        const donations = localStorage.getItem("donationCount");
+        if (donations) {
+            const count = parseInt(donations);
+            setTotalDonated(count);
+            setRemainingSlots(Math.max(0, 5 - count));
+        }
+    }, []);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        alert(
-            "✅ Formulaire envoyé ! Merci pour votre don. Nous vous contacterons bientôt.",
-        );
+
+        const quantity = parseInt(formData.quantity);
+        const newTotal = totalDonated + quantity;
+
+        if (newTotal > 5) {
+            alert(
+                `⚠️ Vous avez déjà fait don de ${totalDonated} unité(s). Vous ne pouvez pas dépasser 5 unités au total.\n\nPour donner plus de matériel, veuillez devenir partenaire.`,
+            );
+            return;
+        }
+
+        localStorage.setItem("donationCount", newTotal.toString());
+        setTotalDonated(newTotal);
+        setRemainingSlots(5 - newTotal);
+
+        if (newTotal >= 5) {
+            alert(
+                `✅ Formulaire envoyé ! Merci pour votre don.\n\nVous avez atteint la limite de 5 unités. Pour donner plus, veuillez devenir partenaire.`,
+            );
+        } else {
+            alert(
+                `✅ Formulaire envoyé ! Merci pour votre don. Nous vous contacterons bientôt.\n\nVous pouvez encore donner ${5 - newTotal} unité(s).`,
+            );
+        }
+
         setFormData({
             name: "",
             email: "",
@@ -46,6 +80,38 @@ export default function DonatePage() {
     return (
         <main className="pb-3 p-3">
             <div className="mx-auto" style={{ maxWidth: "1200px" }}>
+                {/* Limit Notice */}
+                {remainingSlots < 5 && (
+                    <section className="mb-3">
+                        <div className="card" style={{ borderColor: remainingSlots === 0 ? '#ff0000' : '#ffa500', borderWidth: '2px' }}>
+                            <div className="card-header" style={{ backgroundColor: remainingSlots === 0 ? '#ffcccc' : '#fff3cd' }}>
+                                <div className="card-title-wrapper">
+                                    <span className="card-icon">⚠️</span>
+                                    <span className="card-title">
+                                        {remainingSlots === 0 ? 'Limite atteinte' : 'Limite de dons'}
+                                    </span>
+                                </div>
+                            </div>
+                            <div className="card-body">
+                                {remainingSlots === 0 ? (
+                                    <>
+                                        <p className="mb-2">Vous avez atteint la limite de 5 unités pour les particuliers.</p>
+                                        <p className="mb-0">
+                                            <strong>Besoin de donner plus ?</strong> <a href="/partner" className="text-primary">Devenez partenaire</a> pour des dons illimités !
+                                        </p>
+                                    </>
+                                ) : (
+                                    <p className="mb-0">
+                                        Vous avez déjà fait don de <strong>{totalDonated} unité(s)</strong>. 
+                                        Il vous reste <strong>{remainingSlots} unité(s)</strong> à donner. 
+                                        <a href="/partner" className="text-primary ml-2">Devenir partenaire pour plus</a>
+                                    </p>
+                                )}
+                            </div>
+                        </div>
+                    </section>
+                )}
+                
                 {/* Hero Section */}
                 <section className="mb-3">
                     <div className="card card-tertiary">
@@ -223,12 +289,13 @@ export default function DonatePage() {
                                                 htmlFor="quantity"
                                                 className="small"
                                             >
-                                                Quantité
+                                                Quantité (max: {remainingSlots > 0 ? remainingSlots : 0})
                                             </label>
                                             <input
                                                 id="quantity"
                                                 type="number"
                                                 min="1"
+                                                max={remainingSlots > 0 ? remainingSlots : 0}
                                                 className="form-control"
                                                 value={formData.quantity}
                                                 onChange={(e) =>
@@ -238,6 +305,7 @@ export default function DonatePage() {
                                                             e.target.value,
                                                     })
                                                 }
+                                                disabled={remainingSlots === 0}
                                                 required
                                             />
                                         </div>
