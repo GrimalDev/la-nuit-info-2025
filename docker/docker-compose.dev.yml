@@ -29,8 +29,6 @@ services:
     environment:
       - MARIADB_ROOT_PASSWORD=rootpassword
       - MARIADB_DATABASE=libre-tous-tech
-    ports:
-      - "3306:3306"
     volumes:
       - mariadb-data:/var/lib/mysql
       - ../database/seeds/libre-tous-tech.sql:/docker-entrypoint-initdb.d/init.sql:ro
