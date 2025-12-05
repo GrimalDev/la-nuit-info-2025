@@ -3708,9 +3708,9 @@ button.section-black:focus {
     background: #c0c0c0;
 }
 
-.card-primary .card-header {
-    background: #c0c0c0;
-}
+/* .card-primary .card-header { */
+/*     background: #c0c0c0; */
+/* } */
 
 .card-secondary .card-header {
     background: #008081;
@@ -7802,4 +7802,3 @@ a:hover,
 .fmxw-400 {
     max-width: 400px !important;
 }
-

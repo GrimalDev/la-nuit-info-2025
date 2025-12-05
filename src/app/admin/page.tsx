@@ -6,6 +6,13 @@ import { useRouter } from "next/navigation";
 export default function AdminPage() {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [loading, setLoading] = useState(true);
+    const [stats, setStats] = useState({
+        totalDonations: 0,
+        totalPartners: 0,
+        schoolsReached: 0,
+        totalUnits: 0,
+        pendingPartners: 0,
+    });
     const router = useRouter();
 
     useEffect(() => {
@@ -15,6 +22,22 @@ export default function AdminPage() {
             router.push("/login");
         } else {
             setIsAuthenticated(true);
+            
+            // Fetch stats
+            fetch('/api/stats')
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        setStats({
+                            totalDonations: data.stats.totalDonations,
+                            totalPartners: data.stats.totalPartners,
+                            schoolsReached: data.stats.schoolsReached,
+                            totalUnits: data.stats.totalUnits,
+                            pendingPartners: data.stats.pendingPartners,
+                        });
+                    }
+                })
+                .catch(err => console.error('Error fetching stats:', err));
         }
         setLoading(false);
     }, [router]);
@@ -108,7 +131,7 @@ export default function AdminPage() {
                                     </div>
                                 </div>
                                 <div className="card-body text-center d-flex flex-column justify-content-center">
-                                    <h2 className="display-3 mb-0">1862</h2>
+                                    <h2 className="display-3 mb-0">{stats.totalUnits}</h2>
                                     <p className="text-muted mb-0">
                                         matériels reçus
                                     </p>
@@ -137,7 +160,7 @@ export default function AdminPage() {
                                     </div>
                                 </div>
                                 <div className="card-body text-center d-flex flex-column justify-content-center">
-                                    <h2 className="display-3 mb-0">42</h2>
+                                    <h2 className="display-3 mb-0">{stats.totalPartners}</h2>
                                     <p className="text-muted mb-0">actifs</p>
                                 </div>
                             </div>
@@ -164,7 +187,7 @@ export default function AdminPage() {
                                     </div>
                                 </div>
                                 <div className="card-body text-center d-flex flex-column justify-content-center">
-                                    <h2 className="display-3 mb-0">601</h2>
+                                    <h2 className="display-3 mb-0">{stats.schoolsReached}</h2>
                                     <p className="text-muted mb-0">
                                         bénéficiaires
                                     </p>
@@ -193,7 +216,7 @@ export default function AdminPage() {
                                     </div>
                                 </div>
                                 <div className="card-body text-center d-flex flex-column justify-content-center">
-                                    <h2 className="display-3 mb-0">23</h2>
+                                    <h2 className="display-3 mb-0">{stats.pendingPartners}</h2>
                                     <p className="text-muted mb-0">demandes</p>
                                 </div>
                             </div>

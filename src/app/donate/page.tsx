@@ -31,50 +31,71 @@ export default function DonatePage() {
     const [remainingSlots, setRemainingSlots] = useState(5);
 
     useEffect(() => {
-        // Check localStorage for donation count
-        const donations = localStorage.getItem("donationCount");
-        if (donations) {
-            const count = parseInt(donations);
-            setTotalDonated(count);
-            setRemainingSlots(Math.max(0, 5 - count));
-        }
+        // Fetch current donation count from API
+        fetch('/api/donations')
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    setTotalDonated(data.currentDonations);
+                    setRemainingSlots(data.remainingSlots);
+                }
+            })
+            .catch(err => console.error('Error fetching donation count:', err));
     }, []);
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        const quantity = parseInt(formData.quantity);
-        const newTotal = totalDonated + quantity;
+        try {
+            const response = await fetch('/api/donations', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    name: formData.name,
+                    email: formData.email,
+                    region: formData.region,
+                    hardwareType: formData.hardwareType,
+                    quantity: parseInt(formData.quantity),
+                    condition: formData.condition,
+                }),
+            });
 
-        if (newTotal > 5) {
-            alert(
-                `⚠️ Vous avez déjà fait don de ${totalDonated} unité(s). Vous ne pouvez pas dépasser 5 unités au total.\n\nPour donner plus de matériel, veuillez devenir partenaire.`,
-            );
-            return;
+            const data = await response.json();
+
+            if (response.ok && data.success) {
+                // Update local state
+                setTotalDonated(data.currentDonations);
+                setRemainingSlots(data.remainingSlots);
+
+                if (data.currentDonations >= 5) {
+                    alert(
+                        `✅ Formulaire envoyé ! Merci pour votre don.\n\nVous avez atteint la limite de 5 unités. Pour donner plus, veuillez devenir partenaire.`,
+                    );
+                } else {
+                    alert(
+                        `✅ Formulaire envoyé ! Merci pour votre don. Nous vous contacterons bientôt.\n\nVous pouvez encore donner ${data.remainingSlots} unité(s).`,
+                    );
+                }
+
+                // Reset form
+                setFormData({
+                    name: "",
+                    email: "",
+                    region: "",
+                    hardwareType: "",
+                    quantity: "1",
+                    condition: "",
+                });
+            } else {
+                // Handle error
+                alert(`⚠️ ${data.message || data.error || 'Erreur lors de l\'envoi du formulaire'}`);
+            }
+        } catch (error) {
+            console.error('Error submitting donation:', error);
+            alert('⚠️ Erreur de connexion. Veuillez réessayer.');
         }
-
-        localStorage.setItem("donationCount", newTotal.toString());
-        setTotalDonated(newTotal);
-        setRemainingSlots(5 - newTotal);
-
-        if (newTotal >= 5) {
-            alert(
-                `✅ Formulaire envoyé ! Merci pour votre don.\n\nVous avez atteint la limite de 5 unités. Pour donner plus, veuillez devenir partenaire.`,
-            );
-        } else {
-            alert(
-                `✅ Formulaire envoyé ! Merci pour votre don. Nous vous contacterons bientôt.\n\nVous pouvez encore donner ${5 - newTotal} unité(s).`,
-            );
-        }
-
-        setFormData({
-            name: "",
-            email: "",
-            region: "",
-            hardwareType: "",
-            quantity: "1",
-            condition: "",
-        });
     };
 
     return (

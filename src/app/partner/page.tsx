@@ -32,23 +32,45 @@ export default function PartnerPage() {
         siret: "",
     });
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        alert(
-            "✅ Demande de partenariat envoyée ! Notre équipe vous contactera sous 48h pour valider votre compte partenaire.",
-        );
-        setFormData({
-            organizationName: "",
-            organizationType: "",
-            contactName: "",
-            email: "",
-            phone: "",
-            region: "",
-            address: "",
-            hardwareQuantity: "",
-            description: "",
-            siret: "",
-        });
+        
+        try {
+            const response = await fetch('/api/partners', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
+            });
+
+            const data = await response.json();
+
+            if (response.ok && data.success) {
+                alert(
+                    "✅ Demande de partenariat envoyée ! Notre équipe vous contactera sous 48h pour valider votre compte partenaire.",
+                );
+                
+                // Reset form
+                setFormData({
+                    organizationName: "",
+                    organizationType: "",
+                    contactName: "",
+                    email: "",
+                    phone: "",
+                    region: "",
+                    address: "",
+                    hardwareQuantity: "",
+                    description: "",
+                    siret: "",
+                });
+            } else {
+                alert(`⚠️ ${data.error || 'Erreur lors de l\'envoi du formulaire'}`);
+            }
+        } catch (error) {
+            console.error('Error submitting partner request:', error);
+            alert('⚠️ Erreur de connexion. Veuillez réessayer.');
+        }
     };
 
     return (

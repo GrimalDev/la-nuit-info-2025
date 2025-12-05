@@ -93,7 +93,7 @@ CREATE TABLE `donations-status` (
 
 CREATE TABLE `ip-limit-donations` (
   `id` int(11) NOT NULL,
-  `ip` varchar(15) NOT NULL,
+  `ip` varchar(45) NOT NULL,
   `number-donations` tinyint(4) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 

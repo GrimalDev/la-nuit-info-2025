@@ -1,0 +1,366 @@
+'use client';
+
+import { useState, useEffect } from 'react';
+
+interface RegionData {
+  name: string;
+  donations: number;
+  schools: number;
+}
+
+const colorScale = ["#c8e6c9", "#a5d6a7", "#81c784", "#66bb6a", "#4caf50", "#43a047", "#388e3c", "#2e7d32"];
+
+export default function MapPage() {
+  const [regionsData, setRegionsData] = useState<RegionData[]>([]);
+  const [selectedRegion, setSelectedRegion] = useState<RegionData | null>(null);
+  const [hoveredRegion, setHoveredRegion] = useState<RegionData | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch('/api/stats')
+      .then(res => res.json())
+      .then(data => {
+        if (data.success && data.stats.byRegion) {
+          // Transform API data to RegionData format
+          const regions: RegionData[] = data.stats.byRegion.map((r: any) => ({
+            name: r.region,
+            donations: r.total_quantity || 0,
+            schools: Math.floor((r.total_quantity || 0) / 3), // Estimate: 1 school per 3 units
+          }));
+          setRegionsData(regions);
+        }
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error('Error fetching region stats:', err);
+        setLoading(false);
+      });
+  }, []);
+
+  const totalDonations = regionsData.reduce((sum, r) => sum + r.donations, 0);
+  const totalSchools = regionsData.reduce((sum, r) => sum + r.schools, 0);
+
+  const maxDonations = regionsData.length > 0 ? Math.max(...regionsData.map((r) => r.donations)) : 1;
+  const minDonations = regionsData.length > 0 ? Math.min(...regionsData.map((r) => r.donations)) : 0;
+
+  const getColorForDonations = (donations: number) => {
+    const range = maxDonations - minDonations;
+    const normalized = (donations - minDonations) / range;
+    const index = Math.min(Math.floor(normalized * colorScale.length), colorScale.length - 1);
+    return colorScale[index];
+  };
+
+  const getRegionStyle = (region: RegionData, isHovered: boolean, isSelected: boolean) => ({
+    fill: getColorForDonations(region.donations),
+    stroke: isSelected ? "#0066cc" : isHovered ? "#004499" : "#2c3e50",
+    strokeWidth: isSelected ? 2.5 : isHovered ? 2 : 1,
+    strokeLinejoin: "round",
+    strokeLinecap: "round",
+    cursor: "pointer",
+    transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+    filter: isHovered ? "brightness(1.15) drop-shadow(0 4px 8px rgba(0,0,0,0.3))" : isSelected ? "brightness(1.1) drop-shadow(0 3px 6px rgba(0,0,0,0.25))" : "drop-shadow(0 1px 2px rgba(0,0,0,0.1))",
+    transform: isHovered ? "scale(1.02)" : "scale(1)",
+    transformOrigin: "center",
+  });
+
+  return (
+    <main className="pb-3 p-3">
+      <div className="mx-auto" style={{ maxWidth: '1200px' }}>
+        {/* Hero Section */}
+        <section className="mb-3">
+          <div className="card card-tertiary">
+            <div className="card-header">
+              <div className="card-title-wrapper">
+                <span className="card-icon">🗺️</span>
+                <span className="card-title">Carte des dons par région</span>
+              </div>
+              <div className="card-controls">
+                <button className="card-control-btn">_</button>
+                <button className="card-control-btn">□</button>
+                <button className="card-control-btn">✕</button>
+              </div>
+            </div>
+            <div className="card-body">
+              <h5 className="text-center mb-2">Visualisez l'impact de notre initiative</h5>
+              <p className="card-text text-center">
+                Découvrez la répartition des dons de matériel informatique et des écoles partenaires 
+                dans chaque région de France.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* Stats */}
+        <section className="mb-3">
+          <div className="row g-2">
+            <div className="col-12 col-md-6">
+              <div className="card h-100">
+                <div className="card-header">
+                  <div className="card-title-wrapper">
+                    <span className="card-icon">📊</span>
+                    <span className="card-title">{selectedRegion ? selectedRegion.name : "Statistiques nationales"}</span>
+                  </div>
+                  <div className="card-controls">
+                    <button className="card-control-btn">_</button>
+                    <button className="card-control-btn">□</button>
+                    <button className="card-control-btn">✕</button>
+                  </div>
+                </div>
+                <div className="card-body">
+                  <div className="row text-center">
+                    <div className="col-6">
+                      <h3 className="display-4 mb-0">{selectedRegion ? selectedRegion.donations : totalDonations}</h3>
+                      <p className="text-muted small mb-0">Dons</p>
+                    </div>
+                    <div className="col-6">
+                      <h3 className="display-4 mb-0">{selectedRegion ? selectedRegion.schools : totalSchools}</h3>
+                      <p className="text-muted small mb-0">Écoles</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="col-12 col-md-6">
+              <div className="card card-tertiary h-100">
+                <div className="card-header">
+                  <div className="card-title-wrapper">
+                    <span className="card-icon">ℹ️</span>
+                    <span className="card-title">Instructions</span>
+                  </div>
+                  <div className="card-controls">
+                    <button className="card-control-btn">_</button>
+                    <button className="card-control-btn">□</button>
+                    <button className="card-control-btn">✕</button>
+                  </div>
+                </div>
+                <div className="card-body">
+                  <ul className="mb-0 small">
+                    <li>🖱️ Cliquez sur une région pour la sélectionner</li>
+                    <li>👆 Survolez une région pour voir un aperçu</li>
+                    <li>📊 Les couleurs indiquent la densité de dons</li>
+                    <li>🔄 Cliquez à nouveau pour désélectionner</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Map Section */}
+        <section className="mb-3">
+          <div className="card">
+            <div className="card-header">
+              <div className="card-title-wrapper">
+                <span className="card-icon">📍</span>
+                <span className="card-title">France - Cliquez sur une région</span>
+              </div>
+              <div className="card-controls">
+                <button className="card-control-btn">_</button>
+                <button className="card-control-btn">□</button>
+                <button className="card-control-btn">✕</button>
+              </div>
+            </div>
+            <div className="card-body">
+              <div style={{ position: 'relative' }}>
+                {/* Hover info box - top right with fixed width */}
+                <div style={{ 
+                  position: 'absolute', 
+                  top: '10px', 
+                  right: '10px', 
+                  width: '220px', 
+                  minHeight: '100px',
+                  zIndex: 10,
+                  transition: 'all 0.3s ease'
+                }}>
+                  {hoveredRegion ? (
+                    <div className="card border-dark" style={{
+                      background: 'linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%)',
+                      boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+                      animation: 'fadeIn 0.3s ease'
+                    }}>
+                      <div className="card-header py-2" style={{
+                        background: 'linear-gradient(135deg, #007bff 0%, #0056b3 100%)',
+                        color: 'white',
+                        borderBottom: '2px solid #004085'
+                      }}>
+                        <small className="font-weight-bold">📍 {hoveredRegion.name}</small>
+                      </div>
+                      <div className="card-body py-2">
+                        <p className="mb-1 small" style={{ fontWeight: '600' }}>
+                          <span style={{ color: '#28a745' }}>💻</span> Dons: <strong>{hoveredRegion.donations}</strong>
+                        </p>
+                        <p className="mb-0 small" style={{ fontWeight: '600' }}>
+                          <span style={{ color: '#dc3545' }}>🏫</span> Écoles: <strong>{hoveredRegion.schools}</strong>
+                        </p>
+                      </div>
+                    </div>
+                  ) : (
+                    <div style={{ height: '100px' }}></div>
+                  )}
+                </div>
+                
+                <svg
+                  viewBox="0 0 600 700"
+                  className="w-100"
+                  style={{ 
+                    maxWidth: '600px', 
+                    margin: '0 auto', 
+                    display: 'block', 
+                    filter: "drop-shadow(0 4px 8px rgba(0,0,0,0.1))",
+                    borderRadius: '8px',
+                    padding: '20px'
+                  }}
+                >
+                  {regionsData.map((region) => {
+                    // More angular/realistic SVG paths for French regions
+                    const regionPaths: { [key: string]: string } = {
+                      "Île-de-France": "M285,235 L305,233 L318,238 L322,248 L318,265 L305,270 L285,268 L275,258 L275,245 Z",
+                      
+                      "Hauts-de-France": "M235,60 L290,55 L335,62 L360,80 L368,110 L362,135 L340,148 L315,150 L285,145 L265,132 L248,118 L240,95 L238,75 Z",
+                      
+                      "Grand Est": "M362,135 L368,110 L390,100 L430,105 L470,115 L500,140 L510,175 L510,210 L502,240 L485,258 L460,268 L430,268 L400,260 L375,248 L355,238 L348,215 L350,180 L355,160 Z",
+                      
+                      "Normandie": "M135,105 L195,100 L235,108 L265,125 L268,145 L265,165 L248,178 L218,183 L185,180 L155,168 L140,150 L135,125 Z",
+                      
+                      "Bretagne": "M15,135 L55,130 L90,135 L125,150 L148,165 L158,185 L155,205 L145,218 L120,228 L85,230 L50,225 L25,208 L18,188 L15,165 Z",
+                      
+                      "Pays de la Loire": "M145,218 L155,205 L158,185 L175,180 L218,183 L245,195 L255,215 L258,240 L252,268 L235,288 L210,298 L180,298 L155,285 L138,265 L135,245 Z",
+                      
+                      "Centre-Val de Loire": "M245,195 L268,188 L285,195 L305,208 L318,238 L322,265 L315,288 L290,305 L265,305 L245,295 L238,275 L238,255 L240,230 L242,210 Z",
+                      
+                      "Bourgogne-Franche-Comté": "M315,208 L348,205 L375,215 L408,232 L440,248 L462,268 L475,295 L478,325 L468,350 L445,368 L415,370 L385,362 L355,345 L332,325 L318,305 L315,285 L315,265 L318,245 Z",
+                      
+                      "Nouvelle-Aquitaine": "M135,298 L155,285 L180,298 L210,298 L235,308 L252,330 L265,370 L270,415 L272,460 L265,500 L248,535 L220,555 L185,565 L150,568 L115,558 L85,540 L65,510 L58,475 L58,440 L65,405 L80,370 L102,340 L118,318 Z",
+                      
+                      "Occitanie": "M248,535 L265,500 L272,460 L285,448 L315,442 L355,440 L400,445 L445,462 L478,490 L490,525 L490,560 L478,590 L452,608 L410,615 L365,615 L320,608 L285,595 L260,575 L252,558 Z",
+                      
+                      "Auvergne-Rhône-Alpes": "M318,288 L332,318 L355,340 L385,358 L415,368 L448,380 L475,400 L488,430 L492,465 L485,495 L462,512 L425,515 L390,510 L358,495 L328,475 L305,455 L288,430 L275,400 L268,365 L265,335 L275,315 L295,300 Z",
+                      
+                      "Provence-Alpes-Côte d'Azur": "M390,510 L425,512 L462,510 L490,515 L520,530 L545,555 L555,585 L552,610 L532,625 L500,630 L465,628 L432,618 L410,600 L398,575 L392,545 L392,525 Z",
+                      
+                      "Corse": "M572,525 L588,520 L602,528 L608,548 L610,575 L605,605 L590,625 L572,632 L555,628 L545,615 L542,595 L542,570 L548,548 L558,535 Z"
+                    };
+
+                    const path = regionPaths[region.name] || "M0,0 L10,0 L10,10 L0,10 Z";
+                    const isHovered = hoveredRegion?.name === region.name;
+                    const isSelected = selectedRegion?.name === region.name;
+                    
+                    return (
+                      <path
+                        key={region.name}
+                        d={path}
+                        style={getRegionStyle(region, isHovered, isSelected)}
+                        onClick={() => setSelectedRegion(isSelected ? null : region)}
+                        onMouseEnter={() => setHoveredRegion(region)}
+                        onMouseLeave={() => setHoveredRegion(null)}
+                      />
+                    );
+                  })}
+                </svg>
+              </div>
+              <div className="mt-4">
+                <h6 className="text-center mb-3" style={{ fontWeight: '600', color: '#495057' }}>
+                  📊 Intensité des dons
+                </h6>
+                <div className="d-flex align-items-center justify-content-between px-3">
+                  <span className="small font-weight-bold" style={{ color: '#6c757d' }}>
+                    Faible<br/>
+                    <small style={{ fontSize: '0.75rem' }}>({minDonations})</small>
+                  </span>
+                  <div className="d-flex" style={{ 
+                    gap: '3px', 
+                    flex: 1, 
+                    maxWidth: '300px', 
+                    margin: '0 15px',
+                    boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+                    borderRadius: '4px',
+                    overflow: 'hidden'
+                  }}>
+                    {colorScale.map((color, i) => (
+                      <div
+                        key={i}
+                        style={{
+                          backgroundColor: color,
+                          height: '24px',
+                          flex: 1,
+                          border: '1px solid rgba(255,255,255,0.3)',
+                          transition: 'transform 0.2s ease',
+                        }}
+                        onMouseEnter={(e) => e.currentTarget.style.transform = 'scaleY(1.2)'}
+                        onMouseLeave={(e) => e.currentTarget.style.transform = 'scaleY(1)'}
+                      />
+                    ))}
+                  </div>
+                  <span className="small font-weight-bold" style={{ color: '#6c757d' }}>
+                    Élevé<br/>
+                    <small style={{ fontSize: '0.75rem' }}>({maxDonations})</small>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Region Details */}
+        {selectedRegion && (
+          <section className="mb-3">
+            <div className="card card-tertiary">
+              <div className="card-header">
+                <div className="card-title-wrapper">
+                  <span className="card-icon">📍</span>
+                  <span className="card-title">{selectedRegion.name}</span>
+                </div>
+                <div className="card-controls">
+                  <button className="card-control-btn">_</button>
+                  <button className="card-control-btn">□</button>
+                  <button className="card-control-btn">✕</button>
+                </div>
+              </div>
+              <div className="card-body">
+                <div className="row g-2">
+                  <div className="col-12 col-md-6">
+                    <div className="card h-100">
+                      <div className="card-body text-center d-flex flex-column justify-content-center">
+                        <h2 className="display-3 mb-0">{selectedRegion.donations}</h2>
+                        <p className="text-muted mb-0">💻 Dons de matériel</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="col-12 col-md-6">
+                    <div className="card h-100">
+                      <div className="card-body text-center d-flex flex-column justify-content-center">
+                        <h2 className="display-3 mb-0">{selectedRegion.schools}</h2>
+                        <p className="text-muted mb-0">🏫 Écoles partenaires</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="mt-3">
+                  <div className="progress mb-2" style={{ height: '24px' }}>
+                    <div 
+                      className="progress-bar bg-success" 
+                      role="progressbar" 
+                      style={{ width: `${(selectedRegion.donations / totalDonations) * 100}%` }}
+                    >
+                      <span className="font-weight-bold">
+                        {((selectedRegion.donations / totalDonations) * 100).toFixed(1)}%
+                      </span>
+                    </div>
+                  </div>
+                  <p className="text-center small text-muted mb-0">Part des dons nationaux</p>
+                </div>
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* Back Button */}
+        <section className="mb-3 text-center">
+          <a href="/" className="btn btn-primary border-dark">
+            <span className="btn-text">⬅️ Retour à l'accueil</span>
+          </a>
+        </section>
+      </div>
+    </main>
+  );
+}

@@ -1,6 +1,34 @@
 'use client';
 
+import { useEffect, useState } from 'react';
+
 export default function Home() {
+  const [stats, setStats] = useState({
+    totalUnits: 0,
+    schoolsReached: 0,
+    totalPartners: 0,
+  });
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch('/api/stats')
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          setStats({
+            totalUnits: data.stats.totalUnits,
+            schoolsReached: data.stats.schoolsReached,
+            totalPartners: data.stats.totalPartners,
+          });
+        }
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error('Error fetching stats:', err);
+        setLoading(false);
+      });
+  }, []);
+
   return (
     <main className="pb-3 p-3">
       <div className="mx-auto" style={{ maxWidth: '1200px' }}>
@@ -53,7 +81,7 @@ export default function Home() {
                   </div>
                 </div>
                 <div className="card-body text-center d-flex flex-column justify-content-center">
-                  <h2 className="display-3 mb-0">1862</h2>
+                  <h2 className="display-3 mb-0">{loading ? '...' : stats.totalUnits}</h2>
                   <p className="text-muted mb-0">France entière</p>
                 </div>
               </div>
@@ -72,7 +100,7 @@ export default function Home() {
                   </div>
                 </div>
                 <div className="card-body text-center d-flex flex-column justify-content-center">
-                  <h2 className="display-3 mb-0">601</h2>
+                  <h2 className="display-3 mb-0">{loading ? '...' : stats.schoolsReached}</h2>
                   <p className="text-muted mb-0">établissements</p>
                 </div>
               </div>
@@ -91,7 +119,7 @@ export default function Home() {
                   </div>
                 </div>
                 <div className="card-body text-center d-flex flex-column justify-content-center">
-                  <h2 className="display-3 mb-0">1456</h2>
+                  <h2 className="display-3 mb-0">{loading ? '...' : Math.floor(stats.totalUnits * 0.78)}</h2>
                   <p className="text-muted mb-0">avec NIRD OS</p>
                 </div>
               </div>
