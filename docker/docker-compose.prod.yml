@@ -9,8 +9,6 @@ services:
       - DB_NAME=${DB_NAME:-libre-tous-tech}
       - DB_USER=${DB_USER:-root}
       - DB_PASSWORD=${DB_PASSWORD:-testpassword123}
-    ports:
-      - "3000:3000"
     restart: unless-stopped
     networks:
       - app-network
