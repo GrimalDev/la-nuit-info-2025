@@ -1,0 +1,15 @@
+services:
+  nextjs:
+    image: registry.grimmely.com/la-nuit-info-2025:latest
+    container_name: la-nuit-info-nextjs-prod
+    environment:
+      - NODE_ENV=production
+      - DB_HOST=db-nuit-info.grimmely.local
+      - DB_PORT=3306
+      - DB_NAME=libre-tous-tech
+      - DB_USER=root
+      - DB_PASSWORD=testpassword123
+    depends_on:
+      mariadb:
+        condition: service_healthy
+    restart: unless-stopped

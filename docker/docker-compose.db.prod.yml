@@ -1,0 +1,17 @@
+services:
+  mariadb:
+    image: mariadb:10.8
+    env_file:
+      - path: .env
+    container_name: la-nuit-info-mariadb-prod
+    environment:
+      - MARIADB_ROOT_PASSWORD=testpassword123
+      - MARIADB_DATABASE=libre-tous-tech
+      - MARIADB_ALLOW_EMPTY_ROOT_PASSWORD=no
+    volumes:
+      - mariadb-data:/var/lib/mysql
+      - ../database/seeds/libre-tous-tech.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    restart: unless-stopped
+
+volumes:
+  mariadb-data:
