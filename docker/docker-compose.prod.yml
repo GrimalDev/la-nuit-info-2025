@@ -32,7 +32,7 @@ services:
       test:
         [
           "CMD-SHELL",
-          "mysqladmin ping -h localhost -u root -p$$MARIADB_ROOT_PASSWORD || exit 1",
+          "mysqladmin ping -h localhost -uroot -p$${MARIADB_ROOT_PASSWORD} 2>/dev/null || exit 1",
         ]
       interval: 10s
       timeout: 5s
